@@ -1,5 +1,15 @@
 const root = document.getElementById("root");
 
+function TodoForm() {
+    const conteiner = document.createElement("form")
+
+    conteiner.innerHTML = `
+    <input type= "text" />
+    <button>Add</button>
+    `;
+    return conteiner;
+}
+
 function ListItem(todo) {
     const conteiner = document.createElement("div");
 
@@ -29,9 +39,10 @@ function App() {
         { label: "Learn HTML", completed: false },
         { label: "Learn CSS", completed: false },
         { label: "Learn JS", completed: false }
-    ]
-    const conteiner = document.createElement("div")
+    ];
+    const conteiner = document.createElement("div");
 
+    conteiner.appendChild(TodoForm());
     conteiner.appendChild(List(todos));
 
     return conteiner

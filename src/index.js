@@ -1,12 +1,18 @@
 const root = document.getElementById("root");
 
-function TodoForm() {
+function TodoForm(add) {
     const conteiner = document.createElement("form")
 
     conteiner.innerHTML = `
     <input type= "text" />
     <button>Add</button>
     `;
+    conteiner.addEventListener("submit", (e) => {
+        e.preventDefault(); // նշանակում է որ որևէ բան մի արա
+        const value = conteiner.querySelector("input").value;
+        add(value)
+    })
+
     return conteiner;
 }
 
@@ -35,9 +41,9 @@ function List(todos) {
 
 function TodoFooter(todos) {
     const conteiner = document.createElement("div");
-    
+
     const completed = todos.filter(todo => todo.completed === true).length;
-    
+
     conteiner.innerHTML = `
     <span> ${completed} / ${todos.length} Completed </span>
     <button>Clear Completed</button>
@@ -55,11 +61,21 @@ function App() {
     ];
     const conteiner = document.createElement("div");
 
-    conteiner.appendChild(TodoForm());
-    conteiner.appendChild(List(todos));
-    conteiner.appendChild(TodoFooter(todos))
+    function render() {
+        conteiner.innerHTML = "";
+        conteiner.appendChild(TodoForm(function (newText) {
+            todos.push({
+                label: newText,
+                completed: false
+            })
+            render();
+        }));
+        conteiner.appendChild(List(todos));
+        conteiner.appendChild(TodoFooter(todos))
+    }
+    render();
 
-    return conteiner
+    return conteiner;
 }
 
 root.appendChild(App())

@@ -48,7 +48,7 @@ function List(todos, onChange) {
     return container;
 }
 
-function TodoFooter(todos) {
+function TodoFooter(todos, onChange) {
     const container = document.createElement("div");
 
     const completed = todos.filter(todo => todo.completed === true).length;
@@ -56,8 +56,13 @@ function TodoFooter(todos) {
     container.innerHTML = `
     <span> ${completed} / ${todos.length} Completed </span>
     <button>Clear Completed</button>
-
     `;
+
+    const btn = container.querySelector("button");
+    btn.addEventListener("click", () => {
+        onChange(todos.filter((todo) => todo.completed === false))
+    })
+
     return container;
 }
 
@@ -83,7 +88,10 @@ function App() {
         container.appendChild(List(todos, () => {
             render();
         }));
-        container.appendChild(TodoFooter(todos))
+        container.appendChild(TodoFooter(todos, (newTodo) => {
+            todos = newTodo;
+            render();
+        }))
     }
     render();
 

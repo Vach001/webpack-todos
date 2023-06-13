@@ -1,55 +1,64 @@
 const root = document.getElementById("root");
 
 function TodoForm(add) {
-    const conteiner = document.createElement("form")
+    const container = document.createElement("form")
 
-    conteiner.innerHTML = `
+    container.innerHTML = `
     <input type= "text" />
     <button>Add</button>
     `;
-    conteiner.addEventListener("submit", (e) => {
+    container.addEventListener("submit", (e) => {
         e.preventDefault(); // նշանակում է որ որևէ բան մի արա
-        const value = conteiner.querySelector("input").value;
+        const value = container.querySelector("input").value;
         add(value)
     })
 
-    return conteiner;
+    return container;
 }
 
-function ListItem(todo) {
-    const conteiner = document.createElement("div");
+function ListItem(todo, onChange) {
+    const container = document.createElement("div");
 
-    conteiner.innerHTML = `
+    container.innerHTML = `
     <label>
-        <input type= "checkbox" />
+        <input type="checkbox" ${todo.completed ? "checked" : ""}/>
         ${todo.label}
     </label>
     `;
-    return conteiner;
-}
-function List(todos) {
-    const conteiner = document.createElement("div");
 
-    todos.map(todo => {
-        return ListItem(todo);
-    }).forEach(element => {
-        conteiner.appendChild(element)
+    const input = container.querySelector("input");
+    input.addEventListener("change", (e) => {
+        onChange(e.target.checked);
     });
 
-    return conteiner;
+    return container;
+}
+function List(todos, onChange) {
+    const container = document.createElement("div");
+
+    todos.map(todo => {
+        return ListItem(todo, (change) => {
+            todo.completed = change;
+            onChange();
+        });
+    }).forEach(element => {
+        container.appendChild(element)
+    });
+
+    return container;
 }
 
 function TodoFooter(todos) {
-    const conteiner = document.createElement("div");
+    const container = document.createElement("div");
 
     const completed = todos.filter(todo => todo.completed === true).length;
 
-    conteiner.innerHTML = `
+    container.innerHTML = `
     <span> ${completed} / ${todos.length} Completed </span>
     <button>Clear Completed</button>
 
     `;
-    return conteiner;
+    return container;
 }
 
 function App() {
@@ -59,23 +68,26 @@ function App() {
         { label: "Learn CSS", completed: false },
         { label: "Learn JS", completed: false }
     ];
-    const conteiner = document.createElement("div");
+    const container = document.createElement("div");
 
     function render() {
-        conteiner.innerHTML = "";
-        conteiner.appendChild(TodoForm(function (newText) {
+        container.innerHTML = "";
+
+        container.appendChild(TodoForm(function (newText) {
             todos.push({
                 label: newText,
                 completed: false
             })
             render();
         }));
-        conteiner.appendChild(List(todos));
-        conteiner.appendChild(TodoFooter(todos))
+        container.appendChild(List(todos, () => {
+            render();
+        }));
+        container.appendChild(TodoFooter(todos))
     }
     render();
 
-    return conteiner;
+    return container;
 }
 
 root.appendChild(App())

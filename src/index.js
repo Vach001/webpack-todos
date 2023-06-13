@@ -33,6 +33,19 @@ function List(todos) {
     return conteiner;
 }
 
+function TodoFooter(todos) {
+    const conteiner = document.createElement("div");
+    
+    const completed = todos.filter(todo => todo.completed === true).length;
+    
+    conteiner.innerHTML = `
+    <span> ${completed} / ${todos.length} Completed </span>
+    <button>Clear Completed</button>
+
+    `;
+    return conteiner;
+}
+
 function App() {
 
     let todos = [
@@ -44,6 +57,7 @@ function App() {
 
     conteiner.appendChild(TodoForm());
     conteiner.appendChild(List(todos));
+    conteiner.appendChild(TodoFooter(todos))
 
     return conteiner
 }

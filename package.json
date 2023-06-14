@@ -13,5 +13,8 @@
     "todos"
   ],
   "author": "V. Apinyan <apinyan.v@gmail.com>",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "lodash": "^4.17.21"
+  }
 }
